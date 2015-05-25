@@ -1,0 +1,15 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+[modules/*.js]
+indent_style = tab
+indent_size = 2
+
+[{app.js, config.js, config.sample.js, package.json}]
+indent_style = tab
+indent_size = 2
