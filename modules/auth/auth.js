@@ -14,43 +14,47 @@ module.exports = function(app) {
 	// init passport
 	app.use(passport.initialize());
 
-	passport.serializeUser(function(user, done) {
-		done(undefined, JSON.stringify(user));
-	});
-
-	passport.deserializeUser(function(user, done) {
-		done(undefined, JSON.parse(user));
-	});
+	// passport.serializeUser(function(user, done) {
+	// 	done(undefined, JSON.stringify(user));
+	// });
+	//
+	// passport.deserializeUser(function(user, done) {
+	// 	done(undefined, JSON.parse(user));
+	// });
 
 	passport.use(new FacebookStrategy({
 		clientID: config.FB_APP_ID,
 		clientSecret: config.FB_APP_SECRET,
 		callbackURL: `${config.URL}/auth/facebook/callback`
 	}, function(accessToken, refreshToken, profile, done) {
+		done(undefined, {
+			facebookToken: accessToken
+		})
+
 		// determine if user exists
-		User.filter({ facebookId: profile.id }).run()
-			.then(function(users) {
-				console.log('found', users);
-				var user = users[0];
-
-				// if user does not exists, create one
-				if (!user) {
-					console.log('creating user');
-					return User.save({
-						displayName: profile.displayName,
-						facebookId: profile.id
-					});
-				}
-
-				console.log('returning user')
-				return user;
-			})
-			.then(function(user) {
-				done(undefined, Array.isArray(user) ? user[0] : user);
-			})
-			.catch(function(err) {
-				done(err);
-			});
+		// User.filter({ facebookId: profile.id }).run()
+		// 	.then(function(users) {
+		// 		console.log('found', users);
+		// 		var user = users[0];
+		//
+		// 		// if user does not exists, create one
+		// 		if (!user) {
+		// 			console.log('creating user');
+		// 			return User.save({
+		// 				displayName: profile.displayName,
+		// 				facebookId: profile.id
+		// 			});
+		// 		}
+		//
+		// 		console.log('returning user')
+		// 		return user;
+		// 	})
+		// 	.then(function(user) {
+		// 		done(undefined, Array.isArray(user) ? user[0] : user);
+		// 	})
+		// 	.catch(function(err) {
+		// 		done(err);
+		// 	});
 	}));
 
 	// routes

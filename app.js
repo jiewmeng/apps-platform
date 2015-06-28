@@ -13,7 +13,7 @@ app.get('/', function index(req, res) {
 	res.send('Apps Platform!!!');
 });
 
-// require module initializer
+// require module initializers
 require('./modules/auth/auth.js')(app);
 
 var server = app.listen(3000, function() {
